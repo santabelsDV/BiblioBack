@@ -20,11 +20,12 @@ model User {
   firstName    String?
   lastName     String?
   year         Int?
-  accessToken  String
-  refreshToken String
+  accessToken  String?   @db.Text
+  refreshToken String?   @db.Text
   email        String
-  satus        String
-  foto         String?
+  status       Int
+  photo        String?
+  code         Int?
   history      History[]
 }
 
@@ -46,12 +47,24 @@ model Book {
   name String
   page Int
 
-  urlForContents String
+  titlefoto String?
+
+  shortHistory String? @db.Text
 
   authorId Int
   author   Author @relation(fields: [authorId], references: [id])
 
   history History[]
+  pages   Page[]
+}
+
+model Page {
+  id         Int    @id @default(autoincrement())
+  number     Int
+  storageurl String @db.Text
+
+  bookId Int
+  book   Book @relation(fields: [bookId], references: [id])
 }
 
 model Author {
@@ -59,7 +72,7 @@ model Author {
   name         String
   year         Int
   death        Int?
-  shortHistory String
+  shortHistory String @db.Text
 
   books Book[]
 }

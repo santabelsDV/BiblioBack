@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 
-import { PrismaService } from '../../prisma/prisma.service';
+
 import { BooksDto } from './dto/books.dto';
+import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
 export class BooksService {
@@ -9,13 +10,10 @@ export class BooksService {
 
 
   findAll(){
-
-
-    return this.prisma.user.findMany();
+    return this.prisma.book.findMany();
   };
 
   create(dto: BooksDto) {
-
     return this.prisma.book.create({
       data: dto
     });

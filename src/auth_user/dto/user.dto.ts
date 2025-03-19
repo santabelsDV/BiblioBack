@@ -4,14 +4,13 @@ import {
   IsEmail,
   IsOptional,
   IsNotEmpty,
-  MinLength, MaxLength, Min,
+  MinLength, MaxLength, Min, Max,
 } from 'class-validator';
-import { BooksDto } from '../../books/dto/books.dto';
-
 export class UserDto {
 
   @IsInt()
   @Min(1)
+  @IsOptional()
   id: number;
 
   @IsString()
@@ -29,39 +28,49 @@ export class UserDto {
   @IsString()
   @MaxLength(100)
   @IsOptional()
-  firstName?: string;
+  firstName?: string | null;
 
   @IsString()
   @MaxLength(100)
   @IsOptional()
-  lastName?: string;
+  lastName?: string | null;
 
   @IsInt()
   @IsOptional()
-  year?: number;
+  year?: number | null;
 
   @IsString()
-  @MaxLength(1000)
-  @IsNotEmpty()
-  accessToken: string;
+  @IsOptional()
+  accessToken: string | null;
 
   @IsString()
-  @MaxLength(1000)
-  @IsNotEmpty()
-  refreshToken: string;
+  @IsOptional()
+  refreshToken: string |  null;
 
   @IsEmail()
   email: string;
 
-  @IsString()
-  @MaxLength(50)
-  satus: string;
+  @IsInt()
+  @Min(0)
+  @Max(3)
+  @IsOptional()
+  status: number;
 
   @IsString()
   @MaxLength(500)
   @IsOptional()
-  foto?: string;
+  photo?: string | null;
+
+  @IsInt()
+  @Min(100)
+  @Max(10000)
+  @IsOptional()
+  code: number | null;
+
+
+
+
 }
 
 
-export  type  TBooksDto = Partial<BooksDto>
+export  type  TBooksDto = Partial<UserDto>
