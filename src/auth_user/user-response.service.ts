@@ -21,8 +21,8 @@ export class UserResponseService {
 
   async userAdd(dto: UserDto) {
     if (
-      (await this.prisma.user.findMany({ where: { email: dto.email } })) ||
-      (await this.prisma.user.findMany({ where: { login: dto.login } }))
+      (await this.prisma.user.findFirst({ where: { email: dto.email } })) ||
+      (await this.prisma.user.findFirst({ where: { login: dto.login } }))
     ) {
       throw new HttpException(
         'Email already exists or login',
@@ -107,7 +107,6 @@ export class UserResponseService {
     const accessToken = this.jwtService.generateAccessToken(updatedUser);
     const refreshToken = this.jwtService.generateRefreshToken(updatedUser);
 
-    console.log(accessToken);
 
     await this.prisma.user.updateMany({
       where: { email: dto.email },
@@ -116,10 +115,20 @@ export class UserResponseService {
 
     return {
       message: 'success',
-      ' accessToken ': accessToken,
-      ' refreshToken ': refreshToken,
+      'accessToken': accessToken,
+      'refreshToken': refreshToken,
     };
   }
+  async findUserByName(login: string): Promise<UserDto | null> {
+    const users = await this.prisma.user.findMany({
+      where: { login },
+    });
+
+    return users.length > 0 ? users[0] : null;
+  }
+
+
+
 
 
   // async LoginUser(dto: UserLoginDto){

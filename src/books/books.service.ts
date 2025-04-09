@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 
 
 import { BooksDto } from './dto/books.dto';
@@ -13,7 +13,18 @@ export class BooksService {
     return this.prisma.book.findMany();
   };
 
-  create(dto: BooksDto) {
+  async create(dto: BooksDto) {
+
+    const book_object = await this.prisma.book.findMany({
+      where: {
+        name: dto.name
+      }
+    })
+
+    if (book_object.length > 0) {
+      throw new BadRequestException('This book already exists');
+    }
+
     return this.prisma.book.create({
       data: dto
     });
